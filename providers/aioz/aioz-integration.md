@@ -1,37 +1,51 @@
 # AIOZ Network Integration
 
-**Status**: Foundation created (ready for real endpoints)
+**Status**: Foundation + helper script created
 
 ## Overview
-AIOZ Network provides decentralized GPU compute that can be used as inference backends.
+AIOZ Network provides decentralized GPU compute suitable for LLM inference.
 
 ## Current Integration Level
-- Basic example added in `endpoints.txt`
-- Cost metadata support added
-- This document provides the structure for real integration
+- Structured `providers/aioz/` directory
+- Helper script (`aioz-register.sh`)
+- Cost + provider metadata support in `endpoints.txt`
+- This document
 
-## How to Add a Real AIOZ Node
+## Quick Start (Real Usage)
 
-1. Get your AIOZ inference endpoint (from AIOZ dashboard or provider).
-2. Add it to `endpoints/endpoints.txt`:
+### 1. Add a Real AIOZ Node
 
 ```bash
-http://your-aioz-endpoint:8000   # provider=aioz, name=AIOZ-Node-1, cost=0.12, model=Qwen2.5-Coder
+./providers/aioz/aioz-register.sh add \
+    http://your-real-aioz-endpoint:8000 \
+    "AIOZ-Node-Production" \
+    0.12
 ```
 
-3. (Optional) Add health check and cost tracking once the node is live.
+Then run:
+```bash
+./manage_endpoints.sh
+```
 
-## Recommended Metadata Fields
-- `provider=aioz`
-- `name=` (human readable)
-- `cost=` (per 1M tokens or per hour)
-- `model=` (what model(s) it supports)
-- `gpus=` (number and type of GPUs)
+to update the Nginx load balancer.
 
-## Future Enhancements
-- AIOZ-specific authentication (if required)
-- Cost tracking dashboard panel
-- Automatic endpoint discovery (if AIOZ provides an API)
+### 2. Test an AIOZ Node
+
+```bash
+./providers/aioz/aioz-register.sh test http://your-real-aioz-endpoint:8000
+```
+
+### 3. Metadata Format
+
+```bash
+http://aioz-endpoint:8000   # provider=aioz, name=MyNode, cost=0.12, gpus=2x4090
+```
+
+## Next Steps for Full Integration
+- Add AIOZ-specific authentication handling (if required by their platform)
+- Create Grafana panels for AIOZ cost tracking
+- Integrate with the routing layer (`routing/simple-router.py`) for cost-aware selection
+- Monitor health more aggressively for decentralized nodes
 
 ## Notes
-AIOZ integration is currently at the "example + structure" stage. Replace the placeholder with real endpoints when available.
+Replace placeholder URLs with actual AIOZ endpoints from your AIOZ dashboard or provider marketplace.
