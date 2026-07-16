@@ -55,6 +55,8 @@ for f in glob.glob('**/*.yaml', recursive=True) + glob.glob('**/*.yml', recursiv
             "grafana/dashboards/vllm-sharded.json"
             "decentralized-deploy/akash-vllm.yaml"
             "win11-setup/setup.ps1"
+            "systemd/vllm.service"
+            "systemd/orchestrator.service"
           )
           for f in "${files[@]}"; do
             if [[ -f "$f" ]]; then
