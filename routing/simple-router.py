@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Foundational Router with Sharding Awareness
+Foundational Router with Mature Sharding Awareness
 
-The router is now more aware of sharding requirements.
-When dealing with large models, it prefers nodes with higher GPU counts
-suitable for tensor-parallel execution.
+The router prefers high-GPU nodes when handling large models,
+making it suitable for tensor-parallel sharding scenarios.
 
-This integrates routing with the sharding helper tools.
+Integrated with the sharding helper tools.
 """
 
 import re
@@ -68,10 +67,9 @@ def select_with_fallback(backends, strategy="balanced", model_size=None, preferr
         if preferred: return select_backend(preferred, strategy, model_size)
 
     if model_size == "large":
-        # Prefer nodes suitable for sharding (higher GPU count)
+        # Sharding-aware: prefer nodes with more GPUs
         large = filter_backends(backends, min_gpus=2)
-        if large:
-            return select_backend(large, strategy)
+        if large: return select_backend(large, strategy)
 
     return select_backend(backends, strategy)
 

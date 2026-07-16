@@ -1,13 +1,33 @@
-# Sharding Support (Integrated with Routing)
+# Sharding Support (Matured)
 
 ## Tools
-- `suggest-shard.sh` — Suggests nodes with sufficient GPUs
-- Routing layer now uses GPU count when `--model-size large` is specified
+- `suggest-shard.sh` — Mature helper for tensor-parallel node selection
+  - Filters by minimum GPU count
+  - Shows total available capacity
+  - JSON output for automation
+  - Practical recommendations for vLLM
 
 ## Integrated Workflow
-The routing and sharding tools are designed to work together:
+```bash
+# 1. Find suitable nodes
+./sharding/suggest-shard.sh 2
 
-1. Use `suggest-shard.sh` to find candidate nodes
-2. Use the router with `--model-size large` to pick the best one
+# 2. Use routing for intelligent final selection
+python routing/simple-router.py --best-for balanced --model-size large
 
-This is foundational integration between intelligent routing and sharding decisions.
+# 3. Run vLLM with tensor-parallel
+vllm ... --tensor-parallel-size 2 --model <large-model>
+```
+
+## Metadata Requirements
+Nodes should have `gpus=` in `endpoints.txt` comments for best results.
+
+## Current Maturity
+Sharding support is now practical and integrated with routing.
+It can be used for real deployment of large models across multiple nodes.
+
+## Future Enhancements
+- Automated optimal group selection
+- Cost-aware sharding
+- Heterogeneous hardware support
+- Integration with full orchestrator for automatic placement
