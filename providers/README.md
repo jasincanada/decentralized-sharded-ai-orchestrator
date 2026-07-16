@@ -1,25 +1,31 @@
-# Provider System
+# Provider System (Improved)
 
-This directory holds integration for different decentralized compute providers.
+This directory provides a clean structure for integrating different decentralized providers.
 
-## Current Providers
-- `aioz/` — AIOZ Network integration (helper script + docs)
-
-## Design Goal
-Create a consistent way to add and manage providers while keeping the core orchestrator (Nginx + endpoints.txt) stable.
-
-## Recommended Structure for New Providers
+## Current Structure
 
 ```
 providers/
-├── aioz/
+├── aioz/                    # AIOZ Network
 │   ├── aioz-register.sh
 │   └── aioz-integration.md
-└── dynex/          # Future
-    ├── dynex-register.sh
-    └── dynex-integration.md
+└── README.md
 ```
 
+## Design Principles
+- Keep core orchestrator (Nginx + endpoints.txt) stable
+- Each provider has its own directory with registration/testing tools
+- Metadata flows into routing layer automatically
+- Easy to add new providers (Dynex, etc.)
+
 ## Integration with Routing
-The `routing/simple-router.py` can already use `provider=` metadata from endpoints.txt.
-This allows cost-aware or provider-preferred routing.
+The routing layer (`routing/simple-router.py`) reads provider metadata from `endpoints.txt`.
+Tools like `aioz-register.sh` make it easy to add well-formed entries.
+
+## Adding a New Provider
+1. Create `providers/<name>/`
+2. Add a `*-register.sh` helper
+3. Document integration in `*-integration.md`
+4. Update this README
+
+This creates a scalable, clean foundation for multi-provider support.
