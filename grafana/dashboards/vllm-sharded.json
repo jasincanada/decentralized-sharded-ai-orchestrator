@@ -1,0 +1,77 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "vllm-sharded",
+    "title": "vLLM Sharded Orchestrator",
+    "tags": ["vllm", "inference", "sharded", "gpu"],
+    "timezone": "browser",
+    "schemaVersion": 38,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "type": "stat",
+        "title": "Requests / sec",
+        "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "rate(vllm:request_count[1m])",
+            "legendFormat": "Requests/sec"
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Tokens / sec",
+        "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "rate(vllm:token_count[1m])",
+            "legendFormat": "Tokens/sec"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Latency (p50 / p95 / p99)",
+        "gridPos": {"x": 0, "y": 4, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.5, rate(vllm:request_latency_seconds_bucket[5m]))",
+            "legendFormat": "p50"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(vllm:request_latency_seconds_bucket[5m]))",
+            "legendFormat": "p95"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(vllm:request_latency_seconds_bucket[5m]))",
+            "legendFormat": "p99"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "GPU Memory Usage (per node)",
+        "gridPos": {"x": 0, "y": 12, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "vllm:gpu_memory_used_bytes",
+            "legendFormat": "{{instance}}"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "title": "Active Backends",
+        "gridPos": {"x": 0, "y": 20, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "up{job=\"vllm-sharded\"}",
+            "legendFormat": "{{instance}}"
+          }
+        ]
+      }
+    ]
+  }
+}

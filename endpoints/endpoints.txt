@@ -1,0 +1,19 @@
+# endpoints/endpoints.txt
+# One backend per line. Lines starting with # are ignored.
+# Format: http://IP:PORT   # Optional comment
+#
+# Examples:
+
+# Local Windows 11 + RTX 3070 Ti node (via Docker Desktop)
+http://192.168.1.105:8000   # Win11-3070Ti-local
+
+# Ubuntu server node
+# http://10.0.0.50:8000     # Ubuntu-vLLM-node-1
+
+# Akash decentralized deployment
+# http://your-akash-deployment.example.com:8000   # Akash-Qwen-Coder
+
+# io.net or other decentralized provider (add API key header in Nginx if required)
+# http://io-net-provider:8000
+
+# Add more nodes as needed. Run manage_endpoints.sh after editing.

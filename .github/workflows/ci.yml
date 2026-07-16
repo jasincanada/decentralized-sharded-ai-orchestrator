@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate shell scripts with shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+          shellcheck setup_orchestrator.sh manage_endpoints.sh || true
+
+      - name: Check Nginx config syntax (basic)
+        run: |
+          sudo apt-get install -y nginx
+          nginx -t -c $(pwd)/nginx/vllm-orchestrator.conf || true
+
+      - name: Validate YAML files
+        run: |
+          pip install pyyaml
+          python -c "
+import yaml, glob
+for f in glob.glob('**/*.yaml', recursive=True) + glob.glob('**/*.yml', recursive=True):
+    try:
+        yaml.safe_load(open(f))
+        print(f'OK: {f}')
+    except Exception as e:
+        print(f'FAIL: {f} - {e}')
+"
+
+      - name: Check required files exist
+        run: |
+          files=(
+            "README.md"
+            "GETTING_STARTED.md"
+            "CHANGELOG.md"
+            "ROADMAP.md"
+            "LICENSE"
+            ".gitignore"
+            "CONTRIBUTING.md"
+            "setup_orchestrator.sh"
+            "manage_endpoints.sh"
+            "nginx/vllm-orchestrator.conf"
+            "endpoints/endpoints.txt"
+            "prometheus/prometheus.yml"
+            "grafana/provisioning/datasources/vllm.yml"
+            "grafana/dashboards/vllm-sharded.json"
+            "decentralized-deploy/akash-vllm.yaml"
+            "win11-setup/setup.ps1"
+          )
+          for f in "${files[@]}"; do
+            if [[ -f "$f" ]]; then
+              echo "✓ $f"
+            else
+              echo "✗ MISSING: $f"
+              exit 1
+            fi
+          done
+          echo "All required files present."

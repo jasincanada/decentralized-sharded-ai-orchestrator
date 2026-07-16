@@ -1,0 +1,21 @@
+# prometheus/prometheus.yml
+# Basic Prometheus configuration for vLLM sharded cluster monitoring
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'vllm-sharded'
+    static_configs:
+      - targets:
+          - 'localhost:8000'   # Local vLLM instance (adjust if needed)
+          # Add other vLLM nodes here if they expose Prometheus metrics
+          # - '192.168.1.105:8000'
+    metrics_path: /metrics
+    scheme: http
+
+  # Example: If you run cAdvisor or node-exporter for GPU/host metrics
+  # - job_name: 'node-exporter'
+  #   static_configs:
+  #     - targets: ['localhost:9100']
