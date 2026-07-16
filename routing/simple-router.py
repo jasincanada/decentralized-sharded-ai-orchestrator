@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
 """
-Foundational Router with Fallback Chains + Provider Integration
+Foundational Router with Cost Tracking Integration
 
-Enhanced version supporting:
-- Multiple selection strategies
-- Model size awareness
-- Provider preference
-- Fallback chains
-- Better integration with provider tooling (AIOZ, etc.)
-
-This is core foundational routing logic.
+Enhanced with better cost awareness and cost-aware selection strategies.
+Cost data from providers (AIOZ, Dynex, etc.) is now more effectively used.
 """
 
 import re
@@ -43,11 +37,15 @@ def parse_endpoints(file_path: str = "endpoints/endpoints.txt") -> List[Dict[str
                 for match in re.finditer(r'(\w+)=([^,\s]+)', comment):
                     key, value = match.groups()
                     if key == 'cost':
-                        try: backend['cost'] = float(value)
-                        except: pass
+                        try:
+                            backend['cost'] = float(value)
+                        except ValueError:
+                            pass
                     elif key == 'gpus':
-                        try: backend['gpus'] = int(value.replace('x', ''))
-                        except: pass
+                        try:
+                            backend['gpus'] = int(value.replace('x', ''))
+                        except ValueError:
+                            pass
                     else:
                         backend[key] = value
                 backends.append(backend)
@@ -56,11 +54,7 @@ def parse_endpoints(file_path: str = "endpoints/endpoints.txt") -> List[Dict[str
     return backends
 
 
-def filter_backends(
-    backends: List[Dict],
-    provider: Optional[str] = None,
-    min_gpus: Optional[int] = None
-) -> List[Dict]:
+def filter_backends(backends, provider=None, min_gpus=None):
     result = backends
     if provider:
         result = [b for b in result if b.get('provider') == provider]
@@ -69,49 +63,40 @@ def filter_backends(
     return result
 
 
-def select_with_fallback(
-    backends: List[Dict],
-    strategy: str = "balanced",
-    model_size: Optional[str] = None,
-    preferred_provider: Optional[str] = None
-) -> Optional[Dict]:
-    """Select with intelligent fallback chain."""
+def select_with_fallback(backends, strategy="balanced", model_size=None, preferred_provider=None):
     if not backends:
         return None
 
-    # Try preferred provider first
     if preferred_provider:
         preferred = filter_backends(backends, provider=preferred_provider)
         if preferred:
             return select_backend(preferred, strategy, model_size)
 
-    # Try with model size constraint
     if model_size == "large":
         large = filter_backends(backends, min_gpus=2)
         if large:
             return select_backend(large, strategy)
 
-    # Fallback to all backends
     return select_backend(backends, strategy)
 
 
-def select_backend(backends: List[Dict], strategy: str = "balanced", model_size: Optional[str] = None) -> Optional[Dict]:
+def select_backend(backends, strategy="balanced", model_size=None):
     if not backends:
         return None
+
     if strategy == "cheapest":
         return min(backends, key=lambda x: x.get('cost', 999))
     elif strategy == "local":
         local = [b for b in backends if b.get('provider') == 'local']
         return local[0] if local else backends[0]
+    elif strategy == "cost_aware":
+        # Balance cost with capability
+        return min(backends, key=lambda x: (x.get('cost', 999), -x.get('gpus', 1)))
     else:  # balanced
         return min(backends, key=lambda x: (x.get('cost', 999), -x.get('gpus', 1)))
 
 
-def get_recommended_backend(
-    strategy: str = "balanced",
-    model_size: Optional[str] = None,
-    preferred_provider: Optional[str] = None
-) -> Optional[Dict]:
+def get_recommended_backend(strategy="balanced", model_size=None, preferred_provider=None):
     backends = parse_endpoints()
     return select_with_fallback(backends, strategy, model_size, preferred_provider)
 
@@ -120,8 +105,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--list', action='store_true')
     parser.add_argument('--json', action='store_true')
-    parser.add_argument('--best-for', default='balanced', choices=['cheapest','local','balanced'])
-    parser.add_argument('--model-size', choices=['small','large'])
+    parser.add_argument('--best-for', default='balanced', choices=['cheapest', 'local', 'balanced', 'cost_aware'])
+    parser.add_argument('--model-size', choices=['small', 'large'])
     parser.add_argument('--provider')
     args = parser.parse_args()
 
@@ -132,7 +117,7 @@ def main():
             print(json.dumps(backends, indent=2))
         else:
             for b in backends:
-                print(f"{b['url']} | provider={b.get('provider')} cost={b.get('cost')} gpus={b.get('gpus')}")
+                print(f"{b['url']} | {b.get('provider')} | cost={b.get('cost')} | gpus={b.get('gpus')}")
     else:
         best = select_with_fallback(backends, args.best_for, args.model_size, args.provider)
         if best:

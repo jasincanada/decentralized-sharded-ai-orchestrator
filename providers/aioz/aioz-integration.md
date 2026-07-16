@@ -1,15 +1,7 @@
 # AIOZ Network Integration
 
-**Status**: Well-structured with template alignment
+**Status**: Cost tracking fully integrated with routing
 
-## Overview
-AIOZ is integrated using the standard provider pattern.
+Cost data added through `aioz-register.sh` is now used by the routing layer for intelligent, cost-aware selection.
 
-## Tools
-- `aioz-register.sh` — Add and test AIOZ nodes
-- Follows the common metadata format
-
-## Usage
-See `providers/template/provider-template.md` for the general pattern.
-
-AIOZ integration is one of the first real implementations of the provider abstraction.
+See `routing/README.md` for how to use cost-aware strategies.
