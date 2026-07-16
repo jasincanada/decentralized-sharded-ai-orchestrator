@@ -1,34 +1,24 @@
-# Provider System (Improved Abstraction)
+# Provider System (Mature Abstraction)
 
-The provider system now has a clearer abstraction and repeatable pattern.
+The provider system now supports multiple providers at consistent maturity.
 
-## Goals
-- Make adding new providers (Dynex, etc.) easy and consistent
-- Keep core orchestrator stable
-- Allow routing layer to work automatically with new providers via metadata
+## Current Providers
+- `aioz/` — Full integration (register script + docs + routing support)
+- `dynex/` — Full integration (register script + docs + routing support)
 
-## Current Structure
-
+## Structure
 ```
 providers/
-├── aioz/                    # Implemented
-├── template/                # Template & guidelines
+├── aioz/
+├── dynex/
+├── template/
 └── README.md
 ```
 
-## How to Add a New Provider
+## Key Features
+- Consistent registration/testing pattern
+- Automatic routing integration via metadata
+- Works with sharding tools
+- Easy to extend
 
-1. Copy the structure from `providers/template/`
-2. Create `providers/<name>/`
-3. Implement a `*-register.sh` helper
-4. Write integration documentation
-5. Update this README
-
-The routing layer will automatically understand standard metadata fields (`provider=`, `cost=`, `gpus=`, etc.).
-
-## Benefits
-- Consistent developer experience
-- Minimal changes to core system
-- Easy to extend with new decentralized providers
-
-This is foundational work toward a clean multi-provider architecture.
+This is now a mature, scalable provider abstraction layer.
