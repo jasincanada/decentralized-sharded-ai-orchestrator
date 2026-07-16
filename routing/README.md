@@ -1,42 +1,32 @@
-# Routing Layer (Foundational)
+# Routing Layer (Foundational - Enhanced)
 
-This is the core intelligent routing component of the orchestrator.
+The routing layer is now a core part of the orchestrator's intelligence.
 
-## Status
-- Production-oriented foundation implemented
-- Supports rich metadata, multiple strategies, model awareness, and provider preference
-- Ready for integration with provider tooling (AIOZ, Dynex, etc.)
+## Key Improvements
+- Fallback chain logic (preferred provider → model size → general)
+- Better integration with provider metadata (AIOZ, cost, GPU count)
+- More robust selection with `select_with_fallback()`
+- Cleaner structure for future expansion
 
-## Key Features
-- `cheapest`, `local`, `balanced` strategies
-- `--model-size large` awareness
-- `--provider aioz` preference
-- JSON output for scripting/integration
-- Clean fallback behavior
-
-## Usage Examples
+## Usage
 
 ```bash
-# Basic balanced selection
-python routing/simple-router.py --best-for balanced
-
-# Prefer AIOZ nodes for cost reasons
+# Prefer AIOZ, fall back gracefully
 python routing/simple-router.py --best-for cheapest --provider aioz
 
-# Good for large models
+# Large model with fallback
 python routing/simple-router.py --best-for balanced --model-size large
-
-# JSON for automation
-python routing/simple-router.py --best-for cheapest --json
 ```
 
-## Integration Points
-- Can be called from scripts or future orchestration layer
-- Works with metadata from `endpoints.txt` (including AIOZ/Dynex cost data)
-- Foundation for more advanced routing + sharding logic
+## System Integration
+The router reads from `endpoints.txt` and understands provider-specific metadata added by tools like `providers/aioz/aioz-register.sh`.
+
+This creates a foundation where:
+- Adding a new provider automatically makes it available to routing
+- Cost and capability metadata flows through the system
+- We can gradually add more intelligence (sharding decisions, etc.)
 
 ## Next Steps
-- Add fallback chains
-- Integrate cost tracking more deeply
-- Support for frontier model sharding decisions
-- Optional FastAPI wrapper for service mode
+- Deeper cost tracking integration
+- Sharding-aware routing
+- Optional service mode (FastAPI)
