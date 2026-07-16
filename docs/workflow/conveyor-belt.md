@@ -35,7 +35,7 @@ Track progress across key capability areas. Update after each completed task.
 |------------------------------|-----------------------|----------------------|------------------------------------------------|-------|
 | Core Orchestration (Nginx + dynamic endpoints) | Production-Ready      | Production-Ready    | Phase 1 complete | Strong foundation |
 | Windows 11 + 3070 Ti Support | Improved             | Mature              | Multi-GPU, better WSL2 integration           | Phase 1 done |
-| Provider Extensibility       | Design Complete      | Mature              | AIOZ & Dynex support, full abstraction       | Task #5 done |
+| Provider Extensibility       | Examples Added       | Mature              | Full abstraction, real AIOZ/Dynex integration | Tasks 5-7 done |
 | Intelligent Routing & Sharding | Not Started        | Partial             | Model-aware routing, frontier model sharding strategies | High value for large models |
 | Observability & Monitoring   | Good                 | Excellent           | Cost tracking, per-provider metrics, alerting | Grafana dashboard exists |
 | Ease of Node Addition        | Good                 | Excellent           | One-command node registration, validation     | `manage_endpoints.sh` + endpoints.txt |
@@ -49,29 +49,21 @@ Tasks are small and dependency-aware. Status: **Ready** | **In Progress** | **Bl
 
 ### Phase 1: Foundation & Stability - COMPLETE
 
-All four tasks completed.
+All tasks done.
 
 ### Phase 2: Provider Extensibility
 
-5. Design pluggable provider abstraction  
-   **Status: Done** (2026-07-16)
-   Notes: Design document + decision record created.
+5. Design pluggable provider abstraction → **Done**
+6. Initial AIOZ provider support → **Done**
+7. Initial Dynex provider support → **Done** (2026-07-16)
 
-6. Initial AIOZ provider support  
-   **Status: Ready**  
-   Dependencies: Task 5 done  
-   Notes: Research AIOZ inference endpoints + minimal example.
-
-7. Initial Dynex provider support  
-   **Status: Ready**  
-   Dependencies: Task 5 done  
-   Notes: Similar to AIOZ.
+**Phase 2 Status**: Basic examples added. Full integration pending research on real endpoints.
 
 ### Phase 3: Intelligent Routing & Frontier Model Sharding
 
 8. Model-aware routing layer (planning)  
-   **Status: Not Started**  
-   Dependencies: Task 5  
+   **Status: Ready**  
+   Dependencies: Phase 2 examples  
    Notes: Decide where logic lives.
 
 9. Basic sharding strategy for large/frontier models  
