@@ -33,13 +33,13 @@ Track progress across key capability areas. Update after each completed task.
 
 | Capability Area              | Current Maturity      | Target (6-12 mo)     | Key Gaps / Next Tasks                          | Notes |
 |------------------------------|-----------------------|----------------------|------------------------------------------------|-------|
-| Core Orchestration (Nginx + dynamic endpoints) | Mature (v0.1.0)      | Production-Ready    | Auth (done), auto health checks (done), systemd services | Strong foundation |
+| Core Orchestration (Nginx + dynamic endpoints) | Mature (v0.1.0)      | Production-Ready    | Auth (done), health checks (done), systemd (done) | Strong foundation |
 | Windows 11 + 3070 Ti Support | Partial              | Mature              | Better WSL2 integration, multi-GPU, firewall helpers | Good start |
 | Provider Extensibility       | Planning             | Mature              | Abstraction layer design, AIOZ & Dynex support | Explicit future work |
 | Intelligent Routing & Sharding | Not Started        | Partial             | Model-aware routing, frontier model sharding strategies | High value for large models |
 | Observability & Monitoring   | Good                 | Excellent           | Cost tracking, per-provider metrics, alerting | Grafana dashboard exists |
 | Ease of Node Addition        | Good                 | Excellent           | One-command node registration, validation     | `manage_endpoints.sh` + endpoints.txt |
-| Security & Hardening         | Improved             | Strong              | Rate limiting, secrets management | Task #1 completed |
+| Security & Hardening         | Improved             | Strong              | Rate limiting, secrets management | Tasks 1+2 done |
 | Documentation & Onboarding   | Good                 | Excellent           | Video guides, troubleshooting, more examples  | Workflow scaffold now in place |
 | Agentic / RAG Integration    | Not Started          | Partial             | Native hooks for Continue.dev, LangGraph, personal Oracle | Future integration point |
 
@@ -50,16 +50,15 @@ Tasks are small and dependency-aware. Status: **Ready** | **In Progress** | **Bl
 ### Phase 1: Foundation & Stability (Current Focus)
 
 1. **Add basic authentication to the Nginx proxy**  
-   **Status: Done** (2026-07-16)
+   **Status: Done**
 
 2. **Improve health checking and automatic node management**  
-   **Status: Done** (2026-07-16)
-   Notes: Added `--health-check` / `-c` flag to `manage_endpoints.sh`
+   **Status: Done**  
+   Notes: Added `--health-check` flag
 
 3. **Add systemd service files for easier Ubuntu management**  
-   **Status: Ready**  
-   Dependencies: None  
-   Notes: For the orchestrator components and example vLLM service.
+   **Status: Done** (2026-07-16)
+   Notes: Added example systemd/ directory with vllm.service and orchestrator.service
 
 4. **Enhance Windows 11 setup experience**  
    **Status: Ready**  
@@ -70,7 +69,7 @@ Tasks are small and dependency-aware. Status: **Ready** | **In Progress** | **Bl
 
 5. **Design pluggable provider abstraction**  
    **Status: Ready (planning)**  
-   Dependencies: Tasks 1+2 done  
+   Dependencies: Phase 1 tasks done  
    Notes: Define how new providers (AIOZ, Dynex, others) register endpoints.
 
 6. **Initial AIOZ provider support**  
@@ -104,7 +103,7 @@ Tasks are small and dependency-aware. Status: **Ready** | **In Progress** | **Bl
 
 11. **Security hardening pass**  
     **Status: Ready**  
-    Dependencies: Tasks 1+2 done  
+    Dependencies: Phase 1 done  
     Notes: Rate limiting, secrets management, Cloudflare examples.
 
 12. **Expand test/CI coverage**  
