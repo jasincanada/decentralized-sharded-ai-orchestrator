@@ -36,7 +36,7 @@ Track progress across key capability areas. Update after each completed task.
 | Core Orchestration (Nginx + dynamic endpoints) | Production-Ready      | Production-Ready    | Phase 1 complete | Strong foundation |
 | Windows 11 + 3070 Ti Support | Improved             | Mature              | Multi-GPU, better WSL2 integration           | Phase 1 done |
 | Provider Extensibility       | Examples Added       | Mature              | Full abstraction, real AIOZ/Dynex integration | Phase 2 done |
-| Intelligent Routing & Sharding | Design Started     | Partial             | Model-aware routing, frontier model sharding strategies | Task #8 done |
+| Intelligent Routing & Sharding | Design Complete    | Partial             | Implementation of routing + sharding         | Phase 3 planning done |
 | Observability & Monitoring   | Good                 | Excellent           | Cost tracking, per-provider metrics, alerting | Grafana dashboard exists |
 | Ease of Node Addition        | Good                 | Excellent           | One-command node registration, validation     | `manage_endpoints.sh` + endpoints.txt |
 | Security & Hardening         | Improved             | Strong              | Rate limiting, secrets management | Phase 1 done |
@@ -47,20 +47,9 @@ Track progress across key capability areas. Update after each completed task.
 
 Tasks are small and dependency-aware. Status: **Ready** | **In Progress** | **Blocked** | **Done**.
 
-### Phase 1 & 2: COMPLETE
+### Phase 1, 2 & 3 Planning: COMPLETE
 
-Phase 1 (Foundation) and Phase 2 (Provider examples) are done.
-
-### Phase 3: Intelligent Routing & Frontier Model Sharding
-
-8. Model-aware routing layer (planning)  
-   **Status: Done** (2026-07-16)
-   Notes: Design document created.
-
-9. Basic sharding strategy for large/frontier models  
-   **Status: Ready**  
-   Dependencies: Task 8 done  
-   Notes: Tensor-parallel + intelligent dispatch.
+Phases 1-3 planning and basic examples are done.
 
 ### Phase 4: Observability, Operations & Hardening (Parallel Track)
 
