@@ -1,31 +1,34 @@
-# Provider System (Improved)
+# Provider System (Improved Abstraction)
 
-This directory provides a clean structure for integrating different decentralized providers.
+The provider system now has a clearer abstraction and repeatable pattern.
+
+## Goals
+- Make adding new providers (Dynex, etc.) easy and consistent
+- Keep core orchestrator stable
+- Allow routing layer to work automatically with new providers via metadata
 
 ## Current Structure
 
 ```
 providers/
-├── aioz/                    # AIOZ Network
-│   ├── aioz-register.sh
-│   └── aioz-integration.md
+├── aioz/                    # Implemented
+├── template/                # Template & guidelines
 └── README.md
 ```
 
-## Design Principles
-- Keep core orchestrator (Nginx + endpoints.txt) stable
-- Each provider has its own directory with registration/testing tools
-- Metadata flows into routing layer automatically
-- Easy to add new providers (Dynex, etc.)
+## How to Add a New Provider
 
-## Integration with Routing
-The routing layer (`routing/simple-router.py`) reads provider metadata from `endpoints.txt`.
-Tools like `aioz-register.sh` make it easy to add well-formed entries.
+1. Copy the structure from `providers/template/`
+2. Create `providers/<name>/`
+3. Implement a `*-register.sh` helper
+4. Write integration documentation
+5. Update this README
 
-## Adding a New Provider
-1. Create `providers/<name>/`
-2. Add a `*-register.sh` helper
-3. Document integration in `*-integration.md`
-4. Update this README
+The routing layer will automatically understand standard metadata fields (`provider=`, `cost=`, `gpus=`, etc.).
 
-This creates a scalable, clean foundation for multi-provider support.
+## Benefits
+- Consistent developer experience
+- Minimal changes to core system
+- Easy to extend with new decentralized providers
+
+This is foundational work toward a clean multi-provider architecture.
