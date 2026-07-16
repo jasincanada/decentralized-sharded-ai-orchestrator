@@ -33,9 +33,9 @@ Track progress across key capability areas. Update after each completed task.
 
 | Capability Area              | Current Maturity      | Target (6-12 mo)     | Key Gaps / Next Tasks                          | Notes |
 |------------------------------|-----------------------|----------------------|------------------------------------------------|-------|
-| Core Orchestration (Nginx + dynamic endpoints) | Production-Ready      | Production-Ready    | Phase 1 complete (auth, health checks, systemd, Windows) | Strong foundation |
-| Windows 11 + 3070 Ti Support | Improved             | Mature              | Multi-GPU, better WSL2 integration           | Task #4 done |
-| Provider Extensibility       | Planning             | Mature              | Abstraction layer design, AIOZ & Dynex support | Explicit future work |
+| Core Orchestration (Nginx + dynamic endpoints) | Production-Ready      | Production-Ready    | Phase 1 complete | Strong foundation |
+| Windows 11 + 3070 Ti Support | Improved             | Mature              | Multi-GPU, better WSL2 integration           | Phase 1 done |
+| Provider Extensibility       | Design Complete      | Mature              | AIOZ & Dynex support, full abstraction       | Task #5 done |
 | Intelligent Routing & Sharding | Not Started        | Partial             | Model-aware routing, frontier model sharding strategies | High value for large models |
 | Observability & Monitoring   | Good                 | Excellent           | Cost tracking, per-provider metrics, alerting | Grafana dashboard exists |
 | Ease of Node Addition        | Good                 | Excellent           | One-command node registration, validation     | `manage_endpoints.sh` + endpoints.txt |
@@ -49,28 +49,22 @@ Tasks are small and dependency-aware. Status: **Ready** | **In Progress** | **Bl
 
 ### Phase 1: Foundation & Stability - COMPLETE
 
-1. Add basic authentication to the Nginx proxy → **Done**
-2. Improve health checking and automatic node management → **Done**
-3. Add systemd service files for easier Ubuntu management → **Done**
-4. Enhance Windows 11 setup experience → **Done** (2026-07-16)
+All four tasks completed.
 
-**Phase 1 Status: Complete**
-
-### Phase 2: Provider Extensibility (High Priority Future)
+### Phase 2: Provider Extensibility
 
 5. Design pluggable provider abstraction  
-   **Status: Ready (planning)**  
-   Dependencies: Phase 1 complete  
-   Notes: Define how new providers (AIOZ, Dynex, others) register endpoints.
+   **Status: Done** (2026-07-16)
+   Notes: Design document + decision record created.
 
 6. Initial AIOZ provider support  
-   **Status: Not Started**  
-   Dependencies: Task 5  
-   Notes: Research AIOZ inference endpoints.
+   **Status: Ready**  
+   Dependencies: Task 5 done  
+   Notes: Research AIOZ inference endpoints + minimal example.
 
 7. Initial Dynex provider support  
-   **Status: Not Started**  
-   Dependencies: Task 5  
+   **Status: Ready**  
+   Dependencies: Task 5 done  
    Notes: Similar to AIOZ.
 
 ### Phase 3: Intelligent Routing & Frontier Model Sharding
