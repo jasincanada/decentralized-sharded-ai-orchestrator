@@ -13,8 +13,17 @@ if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
+# Check for NVIDIA GPU support in Docker
+Write-Host "[0/5] Checking NVIDIA GPU support in Docker..."
+try {
+    docker info | Select-String "nvidia" | Out-Null
+    Write-Host "NVIDIA GPU support detected in Docker." -ForegroundColor Green
+} catch {
+    Write-Warning "NVIDIA GPU support not detected in Docker. Please enable it in Docker Desktop settings > Resources > WSL Integration."
+}
+
 # Pull latest vLLM image
-Write-Host "[1/4] Pulling vLLM Docker image..."
+Write-Host "[1/5] Pulling vLLM Docker image..."
 docker pull vllm/vllm-openai:latest
 
 # Create models directory if it doesn't exist
@@ -25,7 +34,7 @@ if (-not (Test-Path $modelsPath)) {
 }
 
 # Run vLLM container
-Write-Host "[2/4] Starting vLLM container on port 8000..."
+Write-Host "[2/5] Starting vLLM container on port 8000..."
 docker run -d `
     --name vllm-3070ti `
     --gpus all `
@@ -39,11 +48,11 @@ docker run -d `
     --host 0.0.0.0 `
     --port 8000
 
-Write-Host "[3/4] Waiting for vLLM to become ready (this can take several minutes on first run)..."
+Write-Host "[3/5] Waiting for vLLM to become ready (this can take several minutes on first run)..."
 Start-Sleep -Seconds 30
 
 # Test endpoint
-Write-Host "[4/4] Testing local endpoint..."
+Write-Host "[4/5] Testing local endpoint..."
 try {
     $response = Invoke-RestMethod -Uri "http://localhost:8000/v1/models" -Method GET -TimeoutSec 10
     Write-Host "Success! vLLM is running." -ForegroundColor Green
@@ -52,11 +61,14 @@ try {
     Write-Warning "vLLM may still be loading the model. Check logs with: docker logs -f vllm-3070ti"
 }
 
+Write-Host "[5/5] Final notes..."
 Write-Host ""
 Write-Host "=== Setup Complete ===" -ForegroundColor Green
 Write-Host "Your 3070 Ti node is now available at http://YOUR-WIN11-IP:8000"
 Write-Host "Add this address to endpoints/endpoints.txt on your orchestrator server."
 Write-Host "Then run manage_endpoints.sh to include it in the load balancer."
 Write-Host ""
+Write-Host "Firewall note: You may need to allow port 8000 through Windows Firewall for remote access."
 Write-Host "To stop: docker stop vllm-3070ti"
 Write-Host "To view logs: docker logs -f vllm-3070ti"
+Write-Host "For multi-GPU setups, adjust --gpus flag or use specific GPU IDs."
