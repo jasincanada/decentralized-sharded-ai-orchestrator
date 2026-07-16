@@ -31,41 +31,18 @@ This turns long-term development into a reliable, low-drift pipeline.
 
 Track progress across key capability areas. Update after each completed task.
 
-| Capability Area              | Current Maturity      | Target (6-12 mo)     | Key Gaps / Next Tasks                          | Notes |
-|------------------------------|-----------------------|----------------------|------------------------------------------------|-------|
-| Core Orchestration (Nginx + dynamic endpoints) | Production-Ready      | Production-Ready    | All Phase 1 tasks complete | Strong foundation |
-| Windows 11 + 3070 Ti Support | Improved             | Mature              | Multi-GPU, better WSL2 integration           | Phase 1 done |
-| Provider Extensibility       | Examples Added       | Mature              | Full abstraction + real endpoint integration | Phase 2 done |
-| Intelligent Routing & Sharding | Design Complete    | Partial             | Actual implementation of routing/sharding    | Phase 3 planning done |
-| Observability & Monitoring   | Good                 | Excellent           | Cost tracking, per-provider metrics, alerting | Phase 4 in progress |
-| Ease of Node Addition        | Good                 | Excellent           | One-command node registration, validation     | `manage_endpoints.sh` + endpoints.txt |
-| Security & Hardening         | Improved             | Strong              | Rate limiting enabled | Phase 4 done |
-| Documentation & Onboarding   | Good                 | Excellent           | Video guides, troubleshooting, more examples  | Workflow scaffold now in place |
-| Agentic / RAG Integration    | Not Started          | Partial             | Native hooks for Continue.dev, LangGraph, personal Oracle | Future integration point |
+| Capability Area              | Current Maturity           | Target (6-12 mo)     | Key Gaps / Next Tasks                          | Notes |
+|------------------------------|----------------------------|----------------------|------------------------------------------------|-------|
+| Core Orchestration           | Production-Ready           | Production-Ready     | Phase 1 complete                              | Strong foundation |
+| Provider Extensibility       | Real tooling added         | Mature               | Full AIOZ/Dynex integration + abstraction     | AIOZ helper script added |
+| Routing & Intelligence       | Significantly improved     | Strong               | Full routing + sharding implementation        | Enhanced router with model awareness |
+| Observability & Cost Tracking| Good                       | Excellent            | Per-provider cost panels                      | Basic cost metadata exists |
+| Security & Hardening         | Improved                   | Strong               | Secrets management, advanced rate limiting    | Rate limiting enabled |
+| Documentation & Onboarding   | Good                       | Excellent            | Video guides, troubleshooting                 | Workflow scaffold in place |
+| Agentic / RAG Integration    | Not Started                | Partial              | Native hooks for Continue.dev / LangGraph     | Future work |
 
-## Prioritized Task Backlog
+## Current Focus Area
+Real implementation of AIOZ integration and routing layer is actively progressing.
 
-**Main backlog complete.** All 12 prioritized tasks have been executed.
-
-### Completed Tasks
-
-**Phase 1 (Foundation)**: All 4 tasks done.
-**Phase 2 (Provider Extensibility)**: All 3 tasks done.
-**Phase 3 (Routing & Sharding Planning)**: Both tasks done.
-**Phase 4 (Observability & Hardening)**: All 3 tasks done.
-
-### Ongoing / Evergreen Tasks
-
-- Documentation improvements and example expansions
-- Roadmap and conveyor-belt backlog grooming
-- Integration with personal AI Oracle / RAG systems (on request)
-- New tasks can be added anytime
-
-## Next Steps
-The main development pipeline defined in this document is now complete. Future work can continue by:
-- Adding new tasks to the backlog
-- Expanding the provider examples with real endpoints
-- Implementing the routing/sharding designs from Phase 3
-- Running the recurring scheduled tasks (Monday/Thursday)
-
-The conveyor belt system remains active for all future engineering work.
+## Vision
+The goal is a mature, observable, extensible sharded inference platform that can intelligently route across local + decentralized providers (including AIOZ, Dynex, etc.) and handle frontier-scale models through sharding.
