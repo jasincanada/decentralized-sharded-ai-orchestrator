@@ -16,6 +16,9 @@ http://192.168.1.105:8000   # Win11-3070Ti-local, provider=local
 # AIOZ Network (example - replace with real endpoint when available)
 # http://aioz-provider.example.com:8000   # provider=aioz, name=AIOZ-GPU-Node
 
+# Dynex (example - replace with real endpoint when available)
+# http://dynex-provider.example.com:8000   # provider=dynex, name=Dynex-GPU-Node
+
 # io.net or other decentralized provider (add API key header in Nginx if required)
 # http://io-net-provider:8000
 
