@@ -1,32 +1,16 @@
-# Routing Layer (Foundational - Enhanced)
+# Routing Layer (Foundational)
 
-The routing layer is now a core part of the orchestrator's intelligence.
+The routing layer is a core part of the orchestrator's intelligence and is now better integrated with the overall system.
 
-## Key Improvements
-- Fallback chain logic (preferred provider → model size → general)
-- Better integration with provider metadata (AIOZ, cost, GPU count)
-- More robust selection with `select_with_fallback()`
-- Cleaner structure for future expansion
-
-## Usage
-
-```bash
-# Prefer AIOZ, fall back gracefully
-python routing/simple-router.py --best-for cheapest --provider aioz
-
-# Large model with fallback
-python routing/simple-router.py --best-for balanced --model-size large
-```
+## Recent Improvements
+- Fallback chains
+- Better provider integration (AIOZ metadata)
+- Integration point added in `manage_endpoints.sh` (`--suggest`)
+- Sharding groundwork started (GPU awareness + model-size hints)
 
 ## System Integration
-The router reads from `endpoints.txt` and understands provider-specific metadata added by tools like `providers/aioz/aioz-register.sh`.
+- `manage_endpoints.sh --suggest` can now call the router
+- Router understands provider-specific fields added by `providers/*/register.sh` tools
+- Foundation for sharding-aware decisions is in place
 
-This creates a foundation where:
-- Adding a new provider automatically makes it available to routing
-- Cost and capability metadata flows through the system
-- We can gradually add more intelligence (sharding decisions, etc.)
-
-## Next Steps
-- Deeper cost tracking integration
-- Sharding-aware routing
-- Optional service mode (FastAPI)
+This creates a more cohesive foundation where routing, providers, and core orchestration work together.
