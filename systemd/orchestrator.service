@@ -1,0 +1,11 @@
+[Unit]
+Description=decentralized-sharded-ai-orchestrator (Nginx + management)
+After=network.target nginx.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=vLLM Inference Server
+After=network.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/opt/decentralized-sharded-ai-orchestrator
+ExecStart=/usr/bin/docker compose -f docker-compose.vllm.yml up
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
