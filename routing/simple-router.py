@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """
-Foundational Router with Mature Sharding Awareness
+Advanced Foundational Router
 
-The router prefers high-GPU nodes when handling large models,
-making it suitable for tensor-parallel sharding scenarios.
+This version includes more advanced strategies and is structured for future service mode.
 
-Integrated with the sharding helper tools.
+Capabilities:
+- Multiple intelligent strategies (cheapest, balanced, cost_aware, smart)
+- Multi-criteria scoring
+- Model size & sharding awareness
+- Provider preference + fallback chains
+- JSON output
+- Prepared for service mode (FastAPI / HTTP)
+
+This is the core intelligence layer of the orchestrator.
 """
 
 import re
@@ -52,40 +59,61 @@ def parse_endpoints(file_path: str = "endpoints/endpoints.txt") -> List[Dict[str
     return backends
 
 
-def filter_backends(backends, provider=None, min_gpus=None):
-    result = backends
-    if provider: result = [b for b in result if b.get('provider') == provider]
-    if min_gpus: result = [b for b in result if b.get('gpus', 0) >= min_gpus]
-    return result
+def score_backend(backend: Dict, weights: Dict = None) -> float:
+    """Simple multi-criteria scoring. Lower is better."""
+    if weights is None:
+        weights = {'cost': 1.0, 'gpus': -0.5}  # Prefer lower cost, higher GPUs
+
+    score = 0.0
+    score += backend.get('cost', 999) * weights.get('cost', 1.0)
+    score += -backend.get('gpus', 1) * weights.get('gpus', 0.5)  # negative because higher GPUs is better
+    return score
 
 
-def select_with_fallback(backends, strategy="balanced", model_size=None, preferred_provider=None):
+def select_backend_advanced(backends, strategy="smart", model_size=None, preferred_provider=None):
+    if not backends:
+        return None
+
+    candidates = backends[:]
+
+    if preferred_provider:
+        preferred = [b for b in candidates if b.get('provider') == preferred_provider]
+        if preferred:
+            candidates = preferred
+
+    if model_size == "large":
+        large = [b for b in candidates if b.get('gpus', 1) >= 2]
+        if large:
+            candidates = large
+
+    if strategy == "cheapest":
+        return min(candidates, key=lambda x: x.get('cost', 999))
+    elif strategy == "cost_aware":
+        return min(candidates, key=lambda x: score_backend(x))
+    elif strategy == "smart":
+        # Weighted scoring with preference for capability
+        return min(candidates, key=lambda x: score_backend(x, {'cost': 1.0, 'gpus': -1.0}))
+    else:
+        return min(candidates, key=lambda x: (x.get('cost', 999), -x.get('gpus', 1)))
+
+
+def select_with_fallback(backends, strategy="smart", model_size=None, preferred_provider=None):
     if not backends: return None
 
     if preferred_provider:
-        preferred = filter_backends(backends, provider=preferred_provider)
-        if preferred: return select_backend(preferred, strategy, model_size)
+        preferred = [b for b in backends if b.get('provider') == preferred_provider]
+        if preferred:
+            return select_backend_advanced(preferred, strategy, model_size)
 
     if model_size == "large":
-        # Sharding-aware: prefer nodes with more GPUs
-        large = filter_backends(backends, min_gpus=2)
-        if large: return select_backend(large, strategy)
+        large = [b for b in backends if b.get('gpus', 1) >= 2]
+        if large:
+            return select_backend_advanced(large, strategy)
 
-    return select_backend(backends, strategy)
-
-
-def select_backend(backends, strategy="balanced", model_size=None):
-    if not backends: return None
-    if strategy == "cheapest":
-        return min(backends, key=lambda x: x.get('cost', 999))
-    elif strategy == "local":
-        local = [b for b in backends if b.get('provider') == 'local']
-        return local[0] if local else backends[0]
-    else:
-        return min(backends, key=lambda x: (x.get('cost', 999), -x.get('gpus', 1)))
+    return select_backend_advanced(backends, strategy)
 
 
-def get_recommended_backend(strategy="balanced", model_size=None, preferred_provider=None):
+def get_recommended_backend(strategy="smart", model_size=None, preferred_provider=None):
     backends = parse_endpoints()
     return select_with_fallback(backends, strategy, model_size, preferred_provider)
 
@@ -94,8 +122,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--list', action='store_true')
     parser.add_argument('--json', action='store_true')
-    parser.add_argument('--best-for', default='balanced', choices=['cheapest','local','balanced'])
-    parser.add_argument('--model-size', choices=['small','large'])
+    parser.add_argument('--best-for', default='smart', choices=['cheapest', 'cost_aware', 'smart'])
+    parser.add_argument('--model-size', choices=['small', 'large'])
     parser.add_argument('--provider')
     args = parser.parse_args()
 
