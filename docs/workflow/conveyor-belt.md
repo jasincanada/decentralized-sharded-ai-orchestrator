@@ -33,59 +33,39 @@ Track progress across key capability areas. Update after each completed task.
 
 | Capability Area              | Current Maturity      | Target (6-12 mo)     | Key Gaps / Next Tasks                          | Notes |
 |------------------------------|-----------------------|----------------------|------------------------------------------------|-------|
-| Core Orchestration (Nginx + dynamic endpoints) | Production-Ready      | Production-Ready    | Phase 1 complete | Strong foundation |
+| Core Orchestration (Nginx + dynamic endpoints) | Production-Ready      | Production-Ready    | All Phase 1 tasks complete | Strong foundation |
 | Windows 11 + 3070 Ti Support | Improved             | Mature              | Multi-GPU, better WSL2 integration           | Phase 1 done |
-| Provider Extensibility       | Examples Added       | Mature              | Full abstraction, real AIOZ/Dynex integration | Phase 2 done |
-| Intelligent Routing & Sharding | Design Complete    | Partial             | Implementation of routing + sharding         | Phase 3 done |
-| Observability & Monitoring   | Good                 | Excellent           | Cost tracking (basic), alerting | Phase 4 in progress |
+| Provider Extensibility       | Examples Added       | Mature              | Full abstraction + real endpoint integration | Phase 2 done |
+| Intelligent Routing & Sharding | Design Complete    | Partial             | Actual implementation of routing/sharding    | Phase 3 planning done |
+| Observability & Monitoring   | Good                 | Excellent           | Cost tracking, per-provider metrics, alerting | Phase 4 in progress |
 | Ease of Node Addition        | Good                 | Excellent           | One-command node registration, validation     | `manage_endpoints.sh` + endpoints.txt |
-| Security & Hardening         | Improved             | Strong              | Rate limiting enabled, secrets management | Task #11 done |
+| Security & Hardening         | Improved             | Strong              | Rate limiting enabled | Phase 4 done |
 | Documentation & Onboarding   | Good                 | Excellent           | Video guides, troubleshooting, more examples  | Workflow scaffold now in place |
 | Agentic / RAG Integration    | Not Started          | Partial             | Native hooks for Continue.dev, LangGraph, personal Oracle | Future integration point |
 
 ## Prioritized Task Backlog
 
-Tasks are small and dependency-aware. Status: **Ready** | **In Progress** | **Blocked** | **Done**.
+**Main backlog complete.** All 12 prioritized tasks have been executed.
 
-### Phase 1-3: COMPLETE
+### Completed Tasks
 
-All planning and basic examples done.
+**Phase 1 (Foundation)**: All 4 tasks done.
+**Phase 2 (Provider Extensibility)**: All 3 tasks done.
+**Phase 3 (Routing & Sharding Planning)**: Both tasks done.
+**Phase 4 (Observability & Hardening)**: All 3 tasks done.
 
-### Phase 4: Observability, Operations & Hardening
-
-10. Add cost & usage tracking for decentralized nodes  
-    **Status: Done**
-
-11. Security hardening pass  
-    **Status: Done** (2026-07-16)
-    Notes: Basic rate limiting enabled in Nginx config
-
-12. Expand test/CI coverage  
-    **Status: Ready**  
-    Dependencies: None  
-    Notes: More validation for new configs.
-
-### Ongoing / Evergreen
+### Ongoing / Evergreen Tasks
 
 - Documentation improvements and example expansions
-- Roadmap and conveyor-belt backlog grooming after each major task
-- Integration points with personal AI Oracle / RAG systems (when user requests)
+- Roadmap and conveyor-belt backlog grooming
+- Integration with personal AI Oracle / RAG systems (on request)
+- New tasks can be added anytime
 
-## How to Add New Tasks
+## Next Steps
+The main development pipeline defined in this document is now complete. Future work can continue by:
+- Adding new tasks to the backlog
+- Expanding the provider examples with real endpoints
+- Implementing the routing/sharding designs from Phase 3
+- Running the recurring scheduled tasks (Monday/Thursday)
 
-When a new requirement appears (from user, roadmap, or during a task):
-1. Create a short entry in the appropriate phase above.
-2. Give it a clear title, status, dependencies, and notes.
-3. If it touches architecture or interfaces, create a decision record in `docs/workflow/decisions/`.
-4. Update the Maturity Dashboard.
-
-## Integration with Existing Workflow
-
-This conveyor belt **is** the long-term operating system on top of the 8-stage scaffold. Every task listed here is executed by following the prompts in `docs/workflow/prompts/` and updating the active artifacts.
-
-After completing a task, always return here to mark it **Done**, update the dashboard, and pick the next ready item.
-
-## Vision
-Over time this repo evolves from a solid v0.1.0 orchestration foundation into a mature, extensible, observable platform for personal + decentralized sharded inference — with clean support for multiple providers (Akash today, AIOZ, Dynex, and others tomorrow) and intelligent strategies for running frontier-scale models across heterogeneous hardware.
-
-The conveyor belt ensures this happens gradually, reliably, and with full context preservation across dozens of Grok sessions.
+The conveyor belt system remains active for all future engineering work.
