@@ -33,13 +33,13 @@ Track progress across key capability areas. Update after each completed task.
 
 | Capability Area              | Current Maturity      | Target (6-12 mo)     | Key Gaps / Next Tasks                          | Notes |
 |------------------------------|-----------------------|----------------------|------------------------------------------------|-------|
-| Core Orchestration (Nginx + dynamic endpoints) | Mature (v0.1.0)      | Production-Ready    | Auth (done), health checks (done), systemd (done) | Strong foundation |
-| Windows 11 + 3070 Ti Support | Partial              | Mature              | Better WSL2 integration, multi-GPU, firewall helpers | Good start |
+| Core Orchestration (Nginx + dynamic endpoints) | Production-Ready      | Production-Ready    | Phase 1 complete (auth, health checks, systemd, Windows) | Strong foundation |
+| Windows 11 + 3070 Ti Support | Improved             | Mature              | Multi-GPU, better WSL2 integration           | Task #4 done |
 | Provider Extensibility       | Planning             | Mature              | Abstraction layer design, AIOZ & Dynex support | Explicit future work |
 | Intelligent Routing & Sharding | Not Started        | Partial             | Model-aware routing, frontier model sharding strategies | High value for large models |
 | Observability & Monitoring   | Good                 | Excellent           | Cost tracking, per-provider metrics, alerting | Grafana dashboard exists |
 | Ease of Node Addition        | Good                 | Excellent           | One-command node registration, validation     | `manage_endpoints.sh` + endpoints.txt |
-| Security & Hardening         | Improved             | Strong              | Rate limiting, secrets management | Tasks 1+2 done |
+| Security & Hardening         | Improved             | Strong              | Rate limiting, secrets management | Phase 1 done |
 | Documentation & Onboarding   | Good                 | Excellent           | Video guides, troubleshooting, more examples  | Workflow scaffold now in place |
 | Agentic / RAG Integration    | Not Started          | Partial             | Native hooks for Continue.dev, LangGraph, personal Oracle | Future integration point |
 
@@ -47,66 +47,57 @@ Track progress across key capability areas. Update after each completed task.
 
 Tasks are small and dependency-aware. Status: **Ready** | **In Progress** | **Blocked** | **Done**.
 
-### Phase 1: Foundation & Stability (Current Focus)
+### Phase 1: Foundation & Stability - COMPLETE
 
-1. **Add basic authentication to the Nginx proxy**  
-   **Status: Done**
+1. Add basic authentication to the Nginx proxy → **Done**
+2. Improve health checking and automatic node management → **Done**
+3. Add systemd service files for easier Ubuntu management → **Done**
+4. Enhance Windows 11 setup experience → **Done** (2026-07-16)
 
-2. **Improve health checking and automatic node management**  
-   **Status: Done**  
-   Notes: Added `--health-check` flag
-
-3. **Add systemd service files for easier Ubuntu management**  
-   **Status: Done** (2026-07-16)
-   Notes: Added example systemd/ directory with vllm.service and orchestrator.service
-
-4. **Enhance Windows 11 setup experience**  
-   **Status: Ready**  
-   Dependencies: None  
-   Notes: Better error handling, multi-GPU detection, firewall/port forwarding guidance.
+**Phase 1 Status: Complete**
 
 ### Phase 2: Provider Extensibility (High Priority Future)
 
-5. **Design pluggable provider abstraction**  
+5. Design pluggable provider abstraction  
    **Status: Ready (planning)**  
-   Dependencies: Phase 1 tasks done  
+   Dependencies: Phase 1 complete  
    Notes: Define how new providers (AIOZ, Dynex, others) register endpoints.
 
-6. **Initial AIOZ provider support**  
+6. Initial AIOZ provider support  
    **Status: Not Started**  
    Dependencies: Task 5  
    Notes: Research AIOZ inference endpoints.
 
-7. **Initial Dynex provider support**  
+7. Initial Dynex provider support  
    **Status: Not Started**  
    Dependencies: Task 5  
    Notes: Similar to AIOZ.
 
 ### Phase 3: Intelligent Routing & Frontier Model Sharding
 
-8. **Model-aware routing layer (planning)**  
+8. Model-aware routing layer (planning)  
    **Status: Not Started**  
    Dependencies: Task 5  
    Notes: Decide where logic lives.
 
-9. **Basic sharding strategy for large/frontier models**  
+9. Basic sharding strategy for large/frontier models  
    **Status: Not Started**  
    Dependencies: Task 8  
    Notes: Tensor-parallel + intelligent dispatch.
 
 ### Phase 4: Observability, Operations & Hardening (Parallel Track)
 
-10. **Add cost & usage tracking for decentralized nodes**  
+10. Add cost & usage tracking for decentralized nodes  
     **Status: Ready**  
     Dependencies: None  
     Notes: Extend Grafana or add simple scripts.
 
-11. **Security hardening pass**  
+11. Security hardening pass  
     **Status: Ready**  
     Dependencies: Phase 1 done  
     Notes: Rate limiting, secrets management, Cloudflare examples.
 
-12. **Expand test/CI coverage**  
+12. Expand test/CI coverage  
     **Status: Ready**  
     Dependencies: None  
     Notes: More validation for new configs.
