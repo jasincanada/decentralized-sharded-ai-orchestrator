@@ -39,7 +39,7 @@ Track progress across key capability areas. Update after each completed task.
 | Intelligent Routing & Sharding | Not Started        | Partial             | Model-aware routing, frontier model sharding strategies | High value for large models |
 | Observability & Monitoring   | Good                 | Excellent           | Cost tracking, per-provider metrics, alerting | Grafana dashboard exists |
 | Ease of Node Addition        | Good                 | Excellent           | One-command node registration, validation     | `manage_endpoints.sh` + endpoints.txt |
-| Security & Hardening         | Basic                | Strong              | Auth, rate limiting, secrets management, Cloudflare integration | Important for production |
+| Security & Hardening         | Basic → Improved     | Strong              | Auth (done), rate limiting, secrets management | Task #1 completed |
 | Documentation & Onboarding   | Good                 | Excellent           | Video guides, troubleshooting, more examples  | Workflow scaffold now in place |
 | Agentic / RAG Integration    | Not Started          | Partial             | Native hooks for Continue.dev, LangGraph, personal Oracle | Future integration point |
 
@@ -50,71 +50,70 @@ Tasks are small and dependency-aware. Status: **Ready** | **In Progress** | **Bl
 ### Phase 1: Foundation & Stability (Current Focus)
 
 1. **Add basic authentication to the Nginx proxy**  
-   Status: Ready  
+   **Status: Done** (2026-07-16)  
    Dependencies: None  
-   Estimated effort: Small  
-   Notes: API key or basic auth. Update `nginx/vllm-orchestrator.conf` and docs. Create decision record.
+   Notes: Added commented auth_basic directives + clear enable instructions.
 
 2. **Improve health checking and automatic node management**  
-   Status: Ready  
+   **Status: Ready**  
    Dependencies: None  
-   Notes: Enhance `manage_endpoints.sh` or add a lightweight checker. Support for marking nodes unhealthy.
+   Notes: Enhance `manage_endpoints.sh` or add a lightweight checker.
 
 3. **Add systemd service files for easier Ubuntu management**  
-   Status: Ready  
+   **Status: Ready**  
    Dependencies: None  
    Notes: For the orchestrator components and example vLLM service.
 
 4. **Enhance Windows 11 setup experience**  
-   Status: Ready  
+   **Status: Ready**  
    Dependencies: None  
-   Notes: Better error handling, multi-GPU detection, firewall/port forwarding guidance in `setup.ps1` and docs.
+   Notes: Better error handling, multi-GPU detection, firewall/port forwarding guidance.
 
 ### Phase 2: Provider Extensibility (High Priority Future)
 
 5. **Design pluggable provider abstraction**  
-   Status: Ready (planning)  
-   Dependencies: Task 1-2 helpful but not blocking  
-   Notes: Define how new providers (AIOZ, Dynex, others) register endpoints and metadata without changing core Nginx behavior. Use decision record.
+   **Status: Ready (planning)**  
+   Dependencies: Task 1 helpful  
+   Notes: Define how new providers (AIOZ, Dynex, others) register endpoints.
 
 6. **Initial AIOZ provider support**  
-   Status: Not Started  
+   **Status: Not Started**  
    Dependencies: Task 5  
-   Notes: Research AIOZ inference endpoints, add example in `endpoints/endpoints.txt`, update docs. Smallest viable integration.
+   Notes: Research AIOZ inference endpoints.
 
 7. **Initial Dynex provider support**  
-   Status: Not Started  
+   **Status: Not Started**  
    Dependencies: Task 5  
-   Notes: Similar to AIOZ. Research GPU/inference offering and integration pattern.
+   Notes: Similar to AIOZ.
 
 ### Phase 3: Intelligent Routing & Frontier Model Sharding
 
 8. **Model-aware routing layer (planning)**  
-   Status: Not Started  
+   **Status: Not Started**  
    Dependencies: Task 5  
-   Notes: Decide where logic lives (lightweight script, future FastAPI service, or enhanced Nginx). Focus on selecting appropriate backend for model size / capability.
+   Notes: Decide where logic lives.
 
 9. **Basic sharding strategy for large/frontier models**  
-   Status: Not Started  
+   **Status: Not Started**  
    Dependencies: Task 8  
-   Notes: Tensor-parallel across nodes + intelligent dispatch. Leverage existing multi-node least_conn foundation.
+   Notes: Tensor-parallel + intelligent dispatch.
 
 ### Phase 4: Observability, Operations & Hardening (Parallel Track)
 
 10. **Add cost & usage tracking for decentralized nodes**  
-    Status: Ready  
+    **Status: Ready**  
     Dependencies: None  
-    Notes: Extend Grafana or add simple scripts. Especially useful once AIOZ/Dynex are added.
+    Notes: Extend Grafana or add simple scripts.
 
 11. **Security hardening pass**  
-    Status: Ready  
-    Dependencies: Task 1 (auth)  
-    Notes: Rate limiting, secrets management (SOPS), Cloudflare Tunnel examples, WAF considerations.
+    **Status: Ready**  
+    Dependencies: Task 1 (done)  
+    Notes: Rate limiting, secrets management, Cloudflare examples.
 
 12. **Expand test/CI coverage**  
-    Status: Ready  
+    **Status: Ready**  
     Dependencies: None  
-    Notes: More validation for new provider configs, end-to-end node addition tests.
+    Notes: More validation for new configs.
 
 ### Ongoing / Evergreen
 
