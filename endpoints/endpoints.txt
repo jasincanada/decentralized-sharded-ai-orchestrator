@@ -1,25 +1,23 @@
 # endpoints/endpoints.txt
 # One backend per line. Lines starting with # are ignored.
-# Format: http://IP:PORT   # Optional comment
+# Format: http://IP:PORT   # Optional comment (provider, name, cost, etc.)
 #
 # Examples:
 
 # Local Windows 11 + RTX 3070 Ti node (via Docker Desktop)
-http://192.168.1.105:8000   # Win11-3070Ti-local, provider=local
+http://192.168.1.105:8000   # provider=local, name=Win11-3070Ti, cost=0
 
 # Ubuntu server node
-# http://10.0.0.50:8000     # Ubuntu-vLLM-node-1
+# http://10.0.0.50:8000     # provider=local, name=Ubuntu-vLLM, cost=0
 
 # Akash decentralized deployment
-# http://your-akash-deployment.example.com:8000   # Akash-Qwen-Coder, provider=akash
+# http://your-akash-deployment.example.com:8000   # provider=akash, name=Akash-Qwen, cost=0.3
 
-# AIOZ Network (example - replace with real endpoint when available)
-# http://aioz-provider.example.com:8000   # provider=aioz, name=AIOZ-GPU-Node
+# AIOZ Network (example)
+# http://aioz-provider.example.com:8000   # provider=aioz, name=AIOZ-GPU-Node, cost=0.15
 
-# Dynex (example - replace with real endpoint when available)
-# http://dynex-provider.example.com:8000   # provider=dynex, name=Dynex-GPU-Node
-
-# io.net or other decentralized provider (add API key header in Nginx if required)
-# http://io-net-provider:8000
+# Dynex (example)
+# http://dynex-provider.example.com:8000   # provider=dynex, name=Dynex-GPU-Node, cost=0.12
 
 # Add more nodes as needed. Run manage_endpoints.sh after editing.
+# Future: Cost metadata can be used by routing logic for cost-aware decisions.
