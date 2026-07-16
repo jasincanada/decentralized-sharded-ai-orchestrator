@@ -5,13 +5,16 @@
 # Examples:
 
 # Local Windows 11 + RTX 3070 Ti node (via Docker Desktop)
-http://192.168.1.105:8000   # Win11-3070Ti-local
+http://192.168.1.105:8000   # Win11-3070Ti-local, provider=local
 
 # Ubuntu server node
 # http://10.0.0.50:8000     # Ubuntu-vLLM-node-1
 
 # Akash decentralized deployment
-# http://your-akash-deployment.example.com:8000   # Akash-Qwen-Coder
+# http://your-akash-deployment.example.com:8000   # Akash-Qwen-Coder, provider=akash
+
+# AIOZ Network (example - replace with real endpoint when available)
+# http://aioz-provider.example.com:8000   # provider=aioz, name=AIOZ-GPU-Node
 
 # io.net or other decentralized provider (add API key header in Nginx if required)
 # http://io-net-provider:8000
