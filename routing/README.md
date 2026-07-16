@@ -1,39 +1,42 @@
-# Routing Layer
+# Routing Layer (Foundational)
 
-This directory contains the intelligent / model-aware routing components.
+This is the core intelligent routing component of the orchestrator.
 
-## Current Status (Improved)
-- `simple-router.py` — Enhanced router with:
-  - Rich metadata parsing (provider, cost, gpus, model)
-  - Multiple selection strategies (`cheapest`, `local`, `balanced`)
-  - Basic model-size awareness (`--model-size large`)
-  - JSON output for integration
+## Status
+- Production-oriented foundation implemented
+- Supports rich metadata, multiple strategies, model awareness, and provider preference
+- Ready for integration with provider tooling (AIOZ, Dynex, etc.)
 
-## How to Use
+## Key Features
+- `cheapest`, `local`, `balanced` strategies
+- `--model-size large` awareness
+- `--provider aioz` preference
+- JSON output for scripting/integration
+- Clean fallback behavior
+
+## Usage Examples
 
 ```bash
-# List all backends
-python routing/simple-router.py --list
+# Basic balanced selection
+python routing/simple-router.py --best-for balanced
 
-# Get cheapest available backend
-python routing/simple-router.py --best-for cheapest
+# Prefer AIOZ nodes for cost reasons
+python routing/simple-router.py --best-for cheapest --provider aioz
 
-# Prefer node good for large models
+# Good for large models
 python routing/simple-router.py --best-for balanced --model-size large
 
-# JSON output (useful for scripts)
+# JSON for automation
 python routing/simple-router.py --best-for cheapest --json
 ```
 
-## Integration Ideas
-- Use as a pre-filter before calling Nginx
-- Call from `manage_endpoints.sh` or a wrapper
-- Feed into a more advanced orchestrator later
+## Integration Points
+- Can be called from scripts or future orchestration layer
+- Works with metadata from `endpoints.txt` (including AIOZ/Dynex cost data)
+- Foundation for more advanced routing + sharding logic
 
 ## Next Steps
 - Add fallback chains
-- Integrate cost tracking from AIOZ/Dynex nodes
+- Integrate cost tracking more deeply
 - Support for frontier model sharding decisions
-- Make it a lightweight service (FastAPI) if needed
-
-This is now a functional foundation for full routing implementation.
+- Optional FastAPI wrapper for service mode

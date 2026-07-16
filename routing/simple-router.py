@@ -1,22 +1,30 @@
 #!/usr/bin/env python3
 """
-Enhanced Model-Aware Router for decentralized-sharded-ai-orchestrator
+Foundational Model-Aware Router
 
-Improved version with better metadata handling, model-size awareness,
-fallback support, and JSON output for integration.
+This is the core routing component for the decentralized-sharded-ai-orchestrator.
+It is designed to be extensible and integrate with the provider system.
 
-This builds on the initial design from Task #8.
+Features:
+- Rich metadata parsing
+- Multiple selection strategies
+- Model size awareness
+- Provider-aware selection
+- Fallback chain support
+- JSON output for integration
+
+This forms part of the foundational intelligence layer.
 """
 
 import re
 import json
 import argparse
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 
 
-def parse_endpoints(file_path: str = "endpoints/endpoints.txt") -> List[Dict]:
-    """Parse endpoints.txt with rich metadata support."""
-    backends = []
+def parse_endpoints(file_path: str = "endpoints/endpoints.txt") -> List[Dict[str, Any]]:
+    """Parse endpoints.txt into rich backend objects."""
+    backends: List[Dict[str, Any]] = []
     try:
         with open(file_path, 'r') as f:
             for line in f:
@@ -28,17 +36,16 @@ def parse_endpoints(file_path: str = "endpoints/endpoints.txt") -> List[Dict]:
                 url = parts[0].strip()
                 comment = parts[1].strip() if len(parts) > 1 else ""
 
-                backend = {
+                backend: Dict[str, Any] = {
                     'url': url,
-                    'raw_comment': comment,
                     'provider': 'unknown',
                     'name': url,
                     'cost': 999.0,
                     'gpus': 1,
-                    'model': 'unknown'
+                    'model': 'any',
+                    'raw_comment': comment
                 }
 
-                # Parse key=value pairs
                 for match in re.finditer(r'(\w+)=([^,\s]+)', comment):
                     key, value = match.groups()
                     if key == 'cost':
@@ -60,63 +67,77 @@ def parse_endpoints(file_path: str = "endpoints/endpoints.txt") -> List[Dict]:
     return backends
 
 
-def list_backends(backends: List[Dict], json_output: bool = False):
-    if json_output:
-        print(json.dumps(backends, indent=2))
-        return
-
-    print("Available backends:")
-    for b in backends:
-        print(f"  {b['url']}")
-        print(f"    provider={b.get('provider')} | cost={b.get('cost')} | gpus={b.get('gpus')} | model={b.get('model')}")
+def filter_by_provider(backends: List[Dict], provider: str) -> List[Dict]:
+    return [b for b in backends if b.get('provider') == provider]
 
 
-def select_best_backend(
+def select_backend(
     backends: List[Dict],
-    preference: str = "default",
-    model_size: Optional[str] = None
+    strategy: str = "balanced",
+    model_size: Optional[str] = None,
+    preferred_provider: Optional[str] = None,
+    fallback: bool = True
 ) -> Optional[Dict]:
-    """Select best backend with improved logic."""
+    """Core selection logic with fallback support."""
     if not backends:
         return None
 
-    filtered = backends[:]
+    candidates = backends[:]
 
-    # Basic model size awareness
+    # Provider preference
+    if preferred_provider:
+        provider_nodes = filter_by_provider(candidates, preferred_provider)
+        if provider_nodes:
+            candidates = provider_nodes
+        elif not fallback:
+            return None
+
+    # Model size awareness
     if model_size == "large":
-        filtered = [b for b in filtered if b.get('gpus', 1) >= 2]
-        if not filtered:
-            filtered = backends[:]  # fallback
+        large_nodes = [b for b in candidates if b.get('gpus', 1) >= 2]
+        if large_nodes:
+            candidates = large_nodes
 
-    if preference == "cheapest":
-        return min(filtered, key=lambda x: x.get('cost', 999))
-    elif preference == "local":
-        local_nodes = [b for b in filtered if b.get('provider') == 'local']
-        return local_nodes[0] if local_nodes else filtered[0]
-    elif preference == "balanced":
-        # Prefer lower cost but with decent GPU count
-        return min(filtered, key=lambda x: (x.get('cost', 999), -x.get('gpus', 1)))
+    if strategy == "cheapest":
+        return min(candidates, key=lambda x: x.get('cost', 999))
+    elif strategy == "local":
+        local = [b for b in candidates if b.get('provider') == 'local']
+        return local[0] if local else candidates[0]
+    elif strategy == "balanced":
+        return min(candidates, key=lambda x: (x.get('cost', 999), -x.get('gpus', 1)))
     else:
-        return filtered[0]
+        return candidates[0]
+
+
+def get_best_backend(
+    strategy: str = "balanced",
+    model_size: Optional[str] = None,
+    preferred_provider: Optional[str] = None
+) -> Optional[Dict]:
+    """High-level convenience function."""
+    backends = parse_endpoints()
+    return select_backend(backends, strategy, model_size, preferred_provider)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Enhanced backend router")
-    parser.add_argument('--list', action='store_true', help='List all backends')
-    parser.add_argument('--json', action='store_true', help='Output in JSON')
-    parser.add_argument('--best-for', type=str, default='default',
-                        choices=['default', 'cheapest', 'local', 'balanced'],
-                        help='Selection strategy')
-    parser.add_argument('--model-size', type=str, choices=['small', 'large'],
-                        help='Hint for model size (affects GPU requirements)')
+    parser = argparse.ArgumentParser(description="Foundational Router")
+    parser.add_argument('--list', action='store_true')
+    parser.add_argument('--json', action='store_true')
+    parser.add_argument('--best-for', default='balanced', choices=['cheapest', 'local', 'balanced'])
+    parser.add_argument('--model-size', choices=['small', 'large'])
+    parser.add_argument('--provider', help='Prefer specific provider (e.g. aioz, local)')
     args = parser.parse_args()
 
     backends = parse_endpoints()
 
     if args.list:
-        list_backends(backends, args.json)
+        if args.json:
+            print(json.dumps(backends, indent=2))
+        else:
+            for b in backends:
+                print(f"{b['url']} | {b.get('provider')} | cost={b.get('cost')} | gpus={b.get('gpus')}")
     else:
-        best = select_best_backend(backends, args.best_for, args.model_size)
+        best = select_backend(backends, args.best_for, args.model_size, args.provider)
         if best:
             if args.json:
                 print(json.dumps(best, indent=2))
