@@ -1,29 +1,13 @@
-# Sharding Support (Deepened)
+# Sharding Support (Integrated with Routing)
 
 ## Tools
-- `suggest-shard.sh` — Enhanced helper that suggests suitable nodes for tensor-parallel sharding.
-  - Supports JSON output
-  - Filters by minimum GPU count
+- `suggest-shard.sh` — Suggests nodes with sufficient GPUs
+- Routing layer now uses GPU count when `--model-size large` is specified
 
-## Integration with Routing
-The routing layer can already prefer high-GPU nodes using `--model-size large`.
-You can combine:
-```bash
-# Get nodes good for sharding size 2
-./sharding/suggest-shard.sh 2
+## Integrated Workflow
+The routing and sharding tools are designed to work together:
 
-# Then use routing to pick the best among them
-python routing/simple-router.py --best-for balanced --model-size large
-```
+1. Use `suggest-shard.sh` to find candidate nodes
+2. Use the router with `--model-size large` to pick the best one
 
-## Current Capabilities
-- Basic node suggestion for tensor-parallel
-- GPU metadata driven
-- JSON output for scripting
-- Works with AIOZ and other providers via metadata
-
-## Roadmap
-- Automated optimal group selection
-- Cost-aware sharding decisions
-- Integration with full routing for large model placement
-- Support for heterogeneous node groups
+This is foundational integration between intelligent routing and sharding decisions.
