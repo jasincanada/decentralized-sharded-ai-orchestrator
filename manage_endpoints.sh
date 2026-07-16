@@ -18,6 +18,33 @@ NGINX_UPSTREAM_CONF="nginx/upstream_vllm.conf"
 NGINX_SITE_AVAILABLE="/etc/nginx/sites-available/vllm-orchestrator"
 NGINX_SITE_ENABLED="/etc/nginx/sites-enabled/vllm-orchestrator"
 
+function check_health {
+    echo "=== Health Check Mode ==="
+    if [[ ! -f "$ENDPOINTS_FILE" ]]; then
+        echo "Error: $ENDPOINTS_FILE not found!"
+        exit 1
+    fi
+
+    echo "Checking backend health..."
+    grep -v '^#' "$ENDPOINTS_FILE" | grep -v '^\s*$' | while read -r line; do
+        url=$(echo "$line" | awk '{print $1}')
+        if [[ -n "$url" ]]; then
+            if curl -s --max-time 5 "$url/health" > /dev/null 2>&1; then
+                echo "[OK]   $url"
+            else
+                echo "[FAIL] $url (no response on /health)"
+            fi
+        fi
+    done
+    echo "Health check complete."
+    exit 0
+}
+
+# Handle --health-check flag
+if [[ "${1:-}" == "--health-check" || "${1:-}" == "-c" ]]; then
+    check_health
+fi
+
 echo "=== Managing vLLM Endpoints ==="
 
 if [[ ! -f "$ENDPOINTS_FILE" ]]; then
@@ -67,3 +94,4 @@ fi
 
 echo ""
 echo "Endpoint management complete."
+echo "Tip: Run with --health-check to test backend availability."
