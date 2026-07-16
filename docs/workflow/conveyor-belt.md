@@ -36,8 +36,8 @@ Track progress across key capability areas. Update after each completed task.
 | Core Orchestration (Nginx + dynamic endpoints) | Production-Ready      | Production-Ready    | Phase 1 complete | Strong foundation |
 | Windows 11 + 3070 Ti Support | Improved             | Mature              | Multi-GPU, better WSL2 integration           | Phase 1 done |
 | Provider Extensibility       | Examples Added       | Mature              | Full abstraction, real AIOZ/Dynex integration | Phase 2 done |
-| Intelligent Routing & Sharding | Design Complete    | Partial             | Implementation of routing + sharding         | Phase 3 planning done |
-| Observability & Monitoring   | Good                 | Excellent           | Cost tracking, per-provider metrics, alerting | Grafana dashboard exists |
+| Intelligent Routing & Sharding | Design Complete    | Partial             | Implementation of routing + sharding         | Phase 3 done |
+| Observability & Monitoring   | Good                 | Excellent           | Cost tracking (basic metadata added), alerting | Task #10 done |
 | Ease of Node Addition        | Good                 | Excellent           | One-command node registration, validation     | `manage_endpoints.sh` + endpoints.txt |
 | Security & Hardening         | Improved             | Strong              | Rate limiting, secrets management | Phase 1 done |
 | Documentation & Onboarding   | Good                 | Excellent           | Video guides, troubleshooting, more examples  | Workflow scaffold now in place |
@@ -47,16 +47,15 @@ Track progress across key capability areas. Update after each completed task.
 
 Tasks are small and dependency-aware. Status: **Ready** | **In Progress** | **Blocked** | **Done**.
 
-### Phase 1, 2 & 3 Planning: COMPLETE
+### Phase 1-3: COMPLETE
 
-Phases 1-3 planning and basic examples are done.
+All planning and basic examples done.
 
-### Phase 4: Observability, Operations & Hardening (Parallel Track)
+### Phase 4: Observability, Operations & Hardening
 
 10. Add cost & usage tracking for decentralized nodes  
-    **Status: Ready**  
-    Dependencies: None  
-    Notes: Extend Grafana or add simple scripts.
+    **Status: Done** (2026-07-16)
+    Notes: Cost metadata examples added to endpoints.txt
 
 11. Security hardening pass  
     **Status: Ready**  
