@@ -93,6 +93,9 @@ def select_backend_advanced(backends, strategy="smart", model_size=None, preferr
     elif strategy == "smart":
         # Weighted scoring with preference for capability
         return min(candidates, key=lambda x: score_backend(x, {'cost': 1.0, 'gpus': -1.0}))
+    elif strategy == "balanced":
+        # Balanced: equal weight cost and GPUs
+        return min(candidates, key=lambda x: score_backend(x, {'cost': 0.5, 'gpus': -0.5}))
     else:
         return min(candidates, key=lambda x: (x.get('cost', 999), -x.get('gpus', 1)))
 
@@ -122,7 +125,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--list', action='store_true')
     parser.add_argument('--json', action='store_true')
-    parser.add_argument('--best-for', default='smart', choices=['cheapest', 'cost_aware', 'smart'])
+    parser.add_argument('--best-for', default='smart', choices=['cheapest', 'cost_aware', 'smart', 'balanced'])
     parser.add_argument('--model-size', choices=['small', 'large'])
     parser.add_argument('--provider')
     args = parser.parse_args()
@@ -142,7 +145,7 @@ def main():
                 print(json.dumps(best, indent=2))
             else:
                 print(f"Selected: {best['url']}")
-                print(f"  provider={best.get('provider')} cost={best.get('cost')} gpus={best.get('gpus')}")
+                print(f"  provider={best.get('provider')} cost={best.get('cost')} gpus={b.get('gpus')}")
         else:
             print("No backend available.")
 
