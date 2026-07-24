@@ -17,15 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Continue.dev integration guide
 
 ### Changed
-- N/A
+- Enhanced routing logic in `simple-router.py` with 'balanced' strategy support
+
+### Fixed
+- Bug in argument parser for `--best-for balanced` called from manage_endpoints.sh
+- Typo in print statement in router main function
 
 ### Deprecated
 - N/A
 
 ### Removed
-- N/A
-
-### Fixed
 - N/A
 
 ### Security
