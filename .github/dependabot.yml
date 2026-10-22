@@ -1,0 +1,13 @@
+# Dependabot config: weekly checks, minor+patch grouped, max 5 open PRs per entry.
+# Nothing here auto-merges. Every Dependabot PR still needs a human review and merge.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
